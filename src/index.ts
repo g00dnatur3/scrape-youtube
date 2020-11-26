@@ -2,6 +2,8 @@ import { ResultFilter, ResultType, SearchOptions, Video, Playlist, Results, Live
 import { getStreamData, getPlaylistData, getVideoData } from './parser';
 import { get } from 'https';
 
+const tr = require('tor-request');
+
 class Youtube {
     public debug = false;
     constructor() { }
@@ -16,7 +18,7 @@ class Youtube {
         return new Promise((resolve, reject) => {
             try {
                 const data = page.split('var ytInitialData = ')[1]
-                .split(';</script>')[0];
+                    .split(';</script>')[0];
 
                 resolve(
                     JSON.parse(data).contents
@@ -95,12 +97,26 @@ class Youtube {
         if (this.debug) console.log(url);
 
         return new Promise((resolve, reject) => {
-            get(url, res => {
-                res.setEncoding('utf8');
-                let data = '';
-                res.on('data', chunk => data += chunk);
-                res.on('end', () => resolve(data));
-            }).on('error', reject);
+
+            tr.request(url, (err, res, body) => {
+                console.log('>> TOR_REQUEST_STATUS_CODE:', res.statusCode)
+                if (!err && res.statusCode == 200) {
+                    resolve(body)
+                }
+                else {
+                    reject(err)
+                }
+            });
+
+
+            // get(url, res => {
+            //     res.setEncoding('utf8');
+            //     let data = '';
+            //     res.on('data', chunk => data += chunk);
+            //     res.on('end', () => resolve(data));
+            // }).on('error', reject);
+
+
         });
     }
 
