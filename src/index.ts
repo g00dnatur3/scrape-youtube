@@ -15,7 +15,7 @@ class Youtube {
     }
 
     private extractRenderData(page: string): Promise<JSON> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve: any, reject: any) => {
             try {
                 const data = page.split('var ytInitialData = ')[1]
                     .split(';</script>')[0];
@@ -41,7 +41,7 @@ class Youtube {
      * @param data Video Renderer Data
      */
     private parseData(data: any): Promise<Results> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve: any, reject: any) => {
             try {
                 const results: Results = {
                     videos: [],
@@ -96,9 +96,9 @@ class Youtube {
         const url = this.getURL(query, options);
         if (this.debug) console.log(url);
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve: any, reject: any) => {
 
-            tr.request(url, (err, res, body) => {
+            tr.request(url, (err: any, res: any, body: any) => {
                 console.log('>> TOR_REQUEST_STATUS_CODE:', res.statusCode)
                 if (!err && res.statusCode == 200) {
                     resolve(body)
@@ -121,7 +121,7 @@ class Youtube {
     }
 
     public search(query: string, options: SearchOptions = {}): Promise<Results> {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async (resolve: any, reject: any) => {
             try {
                 const page = await this.load(query, options || {});
                 const data = await this.extractRenderData(page);
