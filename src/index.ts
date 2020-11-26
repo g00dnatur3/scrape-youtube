@@ -99,7 +99,7 @@ class Youtube {
         return new Promise((resolve: any, reject: any) => {
 
             tr.request(url, (err: any, res: any, body: any) => {
-                console.log('>> TOR_REQUEST_STATUS_CODE:', res.statusCode)
+                console.log('>> TOR_REQUEST:', res)
                 if (!err && res.statusCode == 200) {
                     resolve(body)
                 }
